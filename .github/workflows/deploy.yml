@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -13,18 +14,36 @@ permissions:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+
+      - name: Get starred repositories
+        env:
+          GH_TOKEN: ${{ secrets.STARGAZERS_TOKEN }}
+        run: |
+          gh api --paginate --slurp /user/starred \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2026-03-10" \
+            | jq 'flatten | map({
+                name: .full_name,
+                starred: .stargazers_count,
+                url: .html_url
+              })' > events.json
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v4
         with:
           path: '.'
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
