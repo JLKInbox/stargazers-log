@@ -1,15 +1,13 @@
 body {
-    font-family: sans-serif;
-    margin: 2rem;
-  }
-  
-  ul {
-    list-style: none;
-    padding: 0;
-  }
-  
-  li {
-    padding: 0.5rem 0;
-    border-bottom: 1px solid #ddd;
-  }
-  
+  background-color: #0d1117;
+  color: #ffffff;
+}
+
+a {
+  color: #58a6ff;
+}
+
+li {
+  border-bottom: 1px solid #30363d;
+  padding: 10px 0;
+}
